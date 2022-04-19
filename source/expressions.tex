@@ -1198,7 +1198,8 @@ and any other \grammarterm{literal} is a prvalue.
 \indextext{\idxcode{this}}%
 The keyword \keyword{this} names a pointer to the object for which an implicit object member
 function\iref{class.mfct.non.static} is invoked or a non-static data member's
-initializer\iref{class.mem} is evaluated.
+initializer\iref{class.mem} is evaluated, or to its base class
+subobject\iref{class.derived}, as appropriate.
 
 \pnum
 The \defnadj{current}{class} at a program point is
@@ -3197,12 +3198,12 @@ template<typename ...T> int f(int n = 0, T ...t);
 int x = f<int>();               // error: no argument for second function parameter
 \end{codeblock}
 \end{example}
-If the function is an implicit object member
-function, the \keyword{this} parameter of the function\iref{expr.prim.this}
-is initialized with a pointer to the object of the call, converted
-as if by an explicit type conversion\iref{expr.cast}.
 \begin{note}
-There is no access or ambiguity checking on this conversion; the access
+If the function is an implicit object member
+function, within the function the \keyword{this}\iref{expr.prim.this}
+names a pointer to the object of the call or to its base class subobject
+as appropriate, as if converted by an explicit type conversion\iref{expr.cast}.
+There is no access or ambiguity checking on this (notional) conversion; the access
 checking and disambiguation are done as part of the (possibly implicit)
 class member access operator.
 See~\ref{class.member.lookup}, \ref{class.access.base},
