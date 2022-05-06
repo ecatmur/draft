@@ -94,8 +94,8 @@ denotes a cv-unqualified complete non-array object type.
 
 \pnum
 Where a \grammarterm{requires-expression} declares an expression that is
-non-modifying for some constant lvalue operand, additional variations of that
-expression that accept a non-constant lvalue or (possibly constant) rvalue for
+non-modifying for some operand, additional variations of that
+expression that accept differing const-qualification and/or value category for
 the given operand are also required except where such an expression variation is
 explicitly required with differing semantics. These
 \term{implicit expression variations} are required to meet the semantic
@@ -163,6 +163,22 @@ so \tcode{T} satisfies but does not model \tcode{C}.
 Since implementations are not required to validate the syntax
 of implicit requirements, it is unspecified whether an implementation diagnoses
 as ill-formed a program that requires \tcode{C<T>}.
+\end{example}
+
+\pnum
+\begin{example}
+\begin{codeblock}
+template<class U> concept D = requires(U a, U b) { a <=> b; };
+struct U {
+    int i;
+    auto operator<=>(U& r) { return i <=> r.i; }
+    auto operator<=>(const U& r) const { return r.i <=> i; }
+};
+\end{codeblock}
+
+\tcode{U} meets the (explicit and implicit) syntactic requirements of \tcode{D}
+but does not meet its implicit semantic requirements, so a program requiring
+\tcode{D<U>} is ill-formed, no diagnostic required.
 \end{example}
 
 \rSec1[concepts.syn]{Header \tcode{<concepts>} synopsis}
